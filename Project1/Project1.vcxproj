@@ -130,9 +130,11 @@
   <ItemGroup>
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="objloader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glsl.h" />
+    <ClInclude Include="objloader.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="vertexshader.vsh">
