@@ -34,9 +34,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragmentshader.frag" />
+    <Text Include="vertexshader.vsh" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="vertexshader.vert" />
+    <None Include="fragmentshader.fsh" />
   </ItemGroup>
 </Project>

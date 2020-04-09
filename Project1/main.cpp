@@ -19,8 +19,8 @@ using namespace std;
 
 const int WIDTH = 800, HEIGHT = 600;
 
-const char* fragshader_name = "fragmentshader.frag";
-const char* vertexshader_name = "vertexshader.vert";
+const char* fragshader_name = "fragmentshader.fsh";
+const char* vertexshader_name = "vertexshader.vsh";
 
 unsigned const int DELTA_TIME = 10;
 
@@ -176,10 +176,15 @@ void InitBuffers()
     GLuint ibo_elements;
 
     glm::vec3 light_position, ambient_color, diffuse_color;
+    glm::vec3 specular;
+    float power;
 
     light_position = glm::vec3(20, 20, 20);
     ambient_color = glm::vec3(1.0, 0, 1.0);
-    diffuse_color = glm::vec3(0, 1.0, 0);
+    diffuse_color = glm::vec3(1.0, 1.0, 0);
+
+    specular = glm::vec3(0.0, 1.0, 1.0);
+    power = 1;
 
     // vbo for vertices
     glGenBuffers(1, &vbo_vertices);
@@ -241,12 +246,18 @@ void InitBuffers()
     GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
     GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
 
+    GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
+    GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
+
     // Fill uniform vars
     glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv));
     glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light_position));
     glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(ambient_color));
     glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(diffuse_color));
+
+    glUniform3fv(uniform_specular, 1, glm::value_ptr(specular));
+    glUniform1f(uniform_material_power, power);
 }
 
 

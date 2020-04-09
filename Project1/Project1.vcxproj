@@ -137,12 +137,12 @@
     <ClInclude Include="objloader.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="vertexshader.vert">
+    <Text Include="vertexshader.vsh">
       <FileType>Document</FileType>
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragmentshader.frag" />
+    <None Include="fragmentshader.fsh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
