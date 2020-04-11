@@ -11,6 +11,7 @@
 
 #include "objloader.h"
 #include "texture.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ class Object
 public:
 
 	const int WIDTH = 800, HEIGHT = 600; // TODO: THIS SUCKS
+	Camera * camera;
 
 	// ID's
 	GLuint vao;
@@ -41,7 +43,7 @@ public:
 	glm::vec3 specular;
 	float power;
 
-	Object(const char* obj_path, const char* texture_path, GLuint shader_id);
+	Object(const char* obj_path, const char* texture_path, GLuint shader_id, Camera * camera);
 
 	void Render();
 

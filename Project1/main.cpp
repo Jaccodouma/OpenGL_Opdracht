@@ -11,6 +11,7 @@
 #include "objloader.h"
 #include "texture.h"
 #include "Object.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -32,9 +33,8 @@ unsigned const int DELTA_TIME = 10;
 //--------------------------------------------------------------------------------
 GLuint shader_id;
 
-Object *teapot, *test;
 Camera * camera;
-Object3D * teapot, * torus, * cube;
+Object * teapot, * torus, * cube;
 
 
 //--------------------------------------------------------------------------------
@@ -138,15 +138,27 @@ void InitShaders()
 
 void InitObjects()
 {
+    camera = new Camera(
+        45.0f, 
+        WIDTH, 
+        HEIGHT, 
+        glm::vec3(0.0, 2.0, 7.0),
+        glm::vec3(0.0, 0.0, 0.0));
+
     teapot = new Object(
         "Resources/Objects/teapot.obj", 
         "Resources/Textures/uvtemplate.bmp",
-        shader_id);
-    test = new Object(
+        shader_id, camera);
+    torus = new Object(
         "Resources/Objects/torus.obj",
         "Resources/Textures/uvtemplate.bmp",
-        shader_id);
-    test->Translate(1, 0, 0);
+        shader_id, camera);
+    torus->Translate(3, 0, 0);
+    cube = new Object(
+        "Resources/Objects/box.obj",
+        "Resources/Textures/test.bmp",
+        shader_id, camera);
+    cube->Translate(-3, 0, 0);
 }
 
 

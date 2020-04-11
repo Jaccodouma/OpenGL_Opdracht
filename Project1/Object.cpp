@@ -1,10 +1,11 @@
 #include "Object.h"
 
 
-Object::Object(const char* obj_path, const char* texture_path, GLuint shader_id) {
+Object::Object(const char* obj_path, const char* texture_path, GLuint shader_id, Camera * camera) {
 	bool res = loadOBJ(obj_path, vertices, uvs, normals);
 	this->texture_id = loadBMP(texture_path);
 	this->shader_id = shader_id;
+	this->camera = camera;
 
 	InitMaterial();
 	InitMatrices();
@@ -14,12 +15,14 @@ Object::Object(const char* obj_path, const char* texture_path, GLuint shader_id)
 void Object::Render() {
 	if (transformed) {
 		// Update mv
-		mv = view * model;
+		mv = camera->getView() * model;
 
 		// Send mv
 		glUseProgram(shader_id);
 		glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv));
 	}
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 	// Render
 	glBindVertexArray(vao);
@@ -29,15 +32,7 @@ void Object::Render() {
 
 void Object::InitMatrices() {
 	model = glm::mat4();
-	view = glm::lookAt(
-		glm::vec3(2.0, 2.0, 7.0),  // eye
-		glm::vec3(0.0, 0.0, 0.0),  // center
-		glm::vec3(0.0, 1.0, 0.0));  // up
-	projection = glm::perspective(
-		glm::radians(45.0f),
-		1.0f * WIDTH / HEIGHT, 0.1f,
-		20.0f);
-	mv = view * model;
+	mv = camera->getView() * model;
 }
 
 void Object::InitBuffers() {
@@ -111,7 +106,7 @@ void Object::InitBuffers() {
 	glBindVertexArray(0);
 
 	// Define model
-	mv = view * model;
+	mv = camera->getView() * model;
 
 	// Make uniform vars
 	uniform_mv = glGetUniformLocation(shader_id, "mv");
@@ -127,7 +122,7 @@ void Object::InitBuffers() {
 	glUseProgram(shader_id);
 
 	glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv));
-	glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(camera->getProjection()));
 	glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light_position));
 	glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(ambient_color));
 	glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(diffuse_color));
@@ -148,7 +143,7 @@ void Object::InitMaterial() {
 // TRANSFORMATIONS 
 // ---------------------------------------------------------------------
 void Object::Rotate(float d, glm::vec3 axis) {
-	model = glm::rotate(model, d, axis);
+	model = glm::rotate(model, glm::radians(d), axis);
 	transformed = true; 
 }
 
