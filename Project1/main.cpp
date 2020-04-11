@@ -33,6 +33,8 @@ unsigned const int DELTA_TIME = 10;
 GLuint shader_id;
 
 Object *teapot, *test;
+Camera * camera;
+Object3D * teapot, * torus, * cube;
 
 
 //--------------------------------------------------------------------------------
@@ -43,6 +45,24 @@ void keyboardHandler(unsigned char key, int a, int b)
 {
     if (key == 27)
         glutExit();
+
+    if (key == 'w')
+        camera->Translate(glm::vec3(0.0f, 0.1f, 0.0f));
+    if (key == 'a')
+        camera->Translate(glm::vec3(-0.1f, 0.0f, 0.0f));
+    if (key == 's')
+        camera->Translate(glm::vec3(0.0f, -0.1f, 0.0f));
+    if (key == 'd')
+        camera->Translate(glm::vec3(0.1f, 0.0f, 0.0f));
+
+    if (key == 'i')
+        camera->Rotate(-1, glm::vec3(1.0f, 0.0f, 0.0f));
+    if (key == 'j')
+        camera->Rotate(-1, glm::vec3(0.0f, 1.0f, 0.0f));
+    if (key == 'k')
+        camera->Rotate(1, glm::vec3(1.0f, 0.0f, 0.0f));
+    if (key == 'l')
+        camera->Rotate(1, glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 
@@ -55,10 +75,11 @@ void Render()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    teapot->Rotate(.01f, glm::vec3(0.0f, 1.0f, 0.0f));
+    teapot->Rotate(1, glm::vec3(0.0f, 1.0f, 0.0f));
 
     teapot->Render();
-    test->Render();
+    torus->Render();
+    cube->Render();
 
     glutSwapBuffers();
 }
