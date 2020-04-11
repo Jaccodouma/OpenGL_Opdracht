@@ -2,7 +2,9 @@
 
 in vec3 position;
 in vec3 normal;
+in vec2 uv;
 
+out vec2 UV;
 out VS_OUT
 {
 	vec3 N;
@@ -16,6 +18,8 @@ uniform vec3 light_pos;
 
 void main()
 {
+	UV = uv;
+
 	// Calculate view-space coordinate
 	vec4 P = mv * vec4(position, 1.0);
 	

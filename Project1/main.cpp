@@ -9,6 +9,7 @@
 
 #include "glsl.h"
 #include "objloader.h"
+#include "texture.h"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ unsigned const int DELTA_TIME = 10;
 // ID's
 GLuint program_id;
 GLuint vao;
+GLuint texture_id;
 
 // Uniform ID's
 GLuint uniform_mvp;
@@ -41,6 +43,15 @@ GLuint uniform_mv;
 glm::mat4 model, view, projection;
 glm::mat4 mvp;
 glm::mat4 mv;
+
+
+//--------------------------------------------------------------------------------
+// Material variables
+//--------------------------------------------------------------------------------
+
+glm::vec3 light_position, ambient_color, diffuse_color;
+glm::vec3 specular;
+float power;
 
 
 //--------------------------------------------------------------------------------
@@ -169,22 +180,11 @@ void InitBuffers()
 {
     GLuint position_id;
     GLuint normal_id;
+    GLuint uv_id;
 
     GLuint vbo_vertices;
     GLuint vbo_normals;
-
-    GLuint ibo_elements;
-
-    glm::vec3 light_position, ambient_color, diffuse_color;
-    glm::vec3 specular;
-    float power;
-
-    light_position = glm::vec3(20, 20, 20);
-    ambient_color = glm::vec3(1.0, 0, 1.0);
-    diffuse_color = glm::vec3(1.0, 1.0, 0);
-
-    specular = glm::vec3(0.0, 1.0, 1.0);
-    power = 1;
+    GLuint vbo_uvs;
 
     // vbo for vertices
     glGenBuffers(1, &vbo_vertices);
@@ -204,9 +204,18 @@ void InitBuffers()
         GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    // vbo for uvs
+    glGenBuffers(1, &vbo_uvs);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
+    glBufferData(GL_ARRAY_BUFFER,
+        uvs.size() * sizeof(glm::vec2),
+        &uvs[0],
+        GL_STATIC_DRAW);
+
     // Get vertex attributes
     position_id = glGetAttribLocation(program_id, "position");
     normal_id = glGetAttribLocation(program_id, "normal");
+    uv_id = glGetAttribLocation(program_id, "uv");
 
     // Allocate memory for vao
     glGenVertexArrays(1, &vao);
@@ -224,6 +233,12 @@ void InitBuffers()
     glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
     glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(normal_id);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // bind uvs to vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
+    glVertexAttribPointer(uv_id, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(uv_id);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // Stop bind to vao
@@ -261,10 +276,39 @@ void InitBuffers()
 }
 
 
+//------------------------------------------------------------
+// void InitObjects()
+//------------------------------------------------------------
+
+void InitObjects()
+{
+    //texture_id = loadBMP("Resources/Textures/Yellobrk.bmp");
+    texture_id = loadBMP("Resources/Textures/uvtemplate.bmp");
+}
+
+
+//------------------------------------------------------------
+// void InitMaterials()
+//------------------------------------------------------------
+
+void InitMaterials()
+{
+
+    light_position = glm::vec3(20, 20, 20);
+    ambient_color = glm::vec3(0.05, 0.05, 0.05);
+    diffuse_color = glm::vec3(1.0, 1.0, 1.0);
+
+    specular = glm::vec3(0.0, 1.0, 1.0);
+    power = 500;
+}
+
+
 int main(int argc, char** argv)
 {
     InitGlutGlew(argc, argv);
     InitShaders();
+    InitMaterials();
+    InitObjects();
     InitMatrices();
     InitBuffers();
 
@@ -273,7 +317,7 @@ int main(int argc, char** argv)
 
     // Hide console window
     HWND hWnd = GetConsoleWindow();
-    ShowWindow(hWnd, SW_HIDE);
+    ShowWindow(hWnd, SW_SHOW);
 
     // Main loop
     glutMainLoop();
