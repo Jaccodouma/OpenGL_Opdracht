@@ -11,12 +11,6 @@ Object::Object(const char* obj_path, const char* texture_path, GLuint shader_id)
 	InitBuffers();
 }
 
-void Object::Update() 
-{
-	this->Rotate(.01f, glm::vec3(0.0f, 1.0f, 0.0f));
-	this->Translate(.01, .01, 0);
-}
-
 void Object::Render() {
 	if (transformed) {
 		// Update mv

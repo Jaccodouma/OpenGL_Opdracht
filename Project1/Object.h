@@ -43,7 +43,6 @@ public:
 
 	Object(const char* obj_path, const char* texture_path, GLuint shader_id);
 
-	void Update();
 	void Render();
 
 	// Transformations

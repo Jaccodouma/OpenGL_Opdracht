@@ -30,42 +30,9 @@ unsigned const int DELTA_TIME = 10;
 //--------------------------------------------------------------------------------
 // Variables
 //--------------------------------------------------------------------------------
-
-// ID's
 GLuint shader_id;
-GLuint vao;
-GLuint texture_id;
 
-// Uniform ID's
-GLuint uniform_mv;
-
-// Matrices
-glm::mat4 model, view, projection;
-glm::mat4 mvp;
-glm::mat4 mv;
-
-
-
-//--------------------------------------------------------------------------------
-// Material variables
-//--------------------------------------------------------------------------------
-
-glm::vec3 light_position, ambient_color, diffuse_color;
-glm::vec3 specular;
-float power;
-
-
-//--------------------------------------------------------------------------------
-// Mesh variables
-//--------------------------------------------------------------------------------
-
-Object *teapot = nullptr;
-
-vector<glm::vec3> normals;
-vector<glm::vec3> vertices;
-vector<glm::vec2> uvs;
-
-bool res = loadOBJ("Resources/Objects/teapot.obj", vertices, uvs, normals);
+Object *teapot, *test;
 
 
 //--------------------------------------------------------------------------------
@@ -88,8 +55,10 @@ void Render()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    teapot->Update();
+    teapot->Rotate(.01f, glm::vec3(0.0f, 1.0f, 0.0f));
+
     teapot->Render();
+    test->Render();
 
     glutSwapBuffers();
 }
@@ -152,6 +121,11 @@ void InitObjects()
         "Resources/Objects/teapot.obj", 
         "Resources/Textures/uvtemplate.bmp",
         shader_id);
+    test = new Object(
+        "Resources/Objects/torus.obj",
+        "Resources/Textures/uvtemplate.bmp",
+        shader_id);
+    test->Translate(1, 0, 0);
 }
 
 
