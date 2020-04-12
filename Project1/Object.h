@@ -44,6 +44,7 @@ public:
 	float power;
 
 	Object(const char* obj_path, const char* texture_path, GLuint shader_id, Camera * camera);
+	Object(const char* obj_path, const char* texture_path, GLuint shader_id, Camera * camera, glm::vec3 pos);
 
 	void Render();
 

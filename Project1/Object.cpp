@@ -12,6 +12,11 @@ Object::Object(const char* obj_path, const char* texture_path, GLuint shader_id,
 	InitBuffers();
 }
 
+Object::Object(const char* obj_path, const char* texture_path, GLuint shader_id, Camera* camera, glm::vec3 pos) : Object(obj_path, texture_path, shader_id, camera)
+{
+	this->Translate(pos);
+}
+
 void Object::Render() {
 	if (transformed) {
 		// Update mv
