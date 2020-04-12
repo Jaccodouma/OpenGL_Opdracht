@@ -82,15 +82,16 @@ void motionHandler(int x, int y)
     static int center_x = glutGet(GLUT_WINDOW_WIDTH) / 2;
     static int center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
 
+    // Get difference in x and y (from center)
     float dx = (float) x- center_x;
     float dy = center_y - (float) y;
 
-    cout << dx << " - " << dy << endl;
-
+    // Rotate camera
     if (dx != 0.0f && dy != 0.0f) {
         camera->Rotate(dx, dy);
     }
 
+    // Put the pointer in the center again 
     glutWarpPointer(center_x, center_y);
 }
 
@@ -134,17 +135,18 @@ void InitGlutGlew(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(1280/2, 720/2);
+    glutInitWindowSize(1280, 720);
     glutCreateWindow("AAAAAAAAAAAAAAAAH");
     glutDisplayFunc(Render);
 
+    // Input handling
     glutKeyboardFunc(keyboardHandler);
     glutSpecialFunc(specialKeyHandler);
     glutPassiveMotionFunc(motionHandler);
 
     glutTimerFunc(DELTA_TIME, Render, 0);
 
-    glutSetCursor(GLUT_CURSOR_NONE);
+    glutSetCursor(GLUT_CURSOR_NONE); // remove cursor
 
     glewInit();
 }
@@ -202,7 +204,7 @@ void InitObjects()
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/door.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
 
     // ------------------------------------------------------
@@ -210,17 +212,17 @@ void InitObjects()
     // ------------------------------------------------------
     objects.push_back(Object(
         "Resources/Objects/bedframe.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera,
         glm::vec3(-0.859137, 0, -0.894849)));
     objects.push_back(Object(
         "Resources/Objects/bedframe_drawer.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera,
         glm::vec3(-0.859137, 0, -0.894849)));
     objects.push_back(Object(
         "Resources/Objects/mattress.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera,
         glm::vec3(-0.859137, 0, -0.894849)));
 
@@ -229,11 +231,11 @@ void InitObjects()
     // ------------------------------------------------------
     objects.push_back(Object(
         "Resources/Objects/fridge.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/fridge_door.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
 
     // ------------------------------------------------------
@@ -241,15 +243,15 @@ void InitObjects()
     // ------------------------------------------------------
     objects.push_back(Object(
         "Resources/Objects/KitchenCabinets.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/KitchenCabinets_Door_L.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/KitchenCabinets_Door_R.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
 
     // ------------------------------------------------------
@@ -261,15 +263,15 @@ void InitObjects()
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/KitchenSink_Bottom.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/KitchenSink_Door_L.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/KitchenSink_Door_R.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
 
     // ------------------------------------------------------
@@ -277,11 +279,11 @@ void InitObjects()
     // ------------------------------------------------------
     objects.push_back(Object(
         "Resources/Objects/Cabinet.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/Cabinet_Drawer.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
 
 
@@ -290,26 +292,25 @@ void InitObjects()
     // ------------------------------------------------------
     objects.push_back(Object(
         "Resources/Objects/desk.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera,
         glm::vec3(-0.624001, 0, 1.5851)));
     objects.push_back(Object(
         "Resources/Objects/couch.obj",
-        "Resources/Textures/paintedwood.bmp",
-        shader_id, camera,
-        glm::vec3(1.37328, 0, -1.18505)));
+        "Resources/Textures/fabric.bmp",
+        shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/radiator.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera,
         glm::vec3(1.81458, 0, 0.765988)));
     objects.push_back(Object(
         "Resources/Objects/shelves_1.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/shelves_2.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/TV.obj",
@@ -317,15 +318,15 @@ void InitObjects()
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/table.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/whitePlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/bin.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/roughPlastic.bmp",
         shader_id, camera));
     objects.push_back(Object(
         "Resources/Objects/clock.obj",
-        "Resources/Textures/paintedwood.bmp",
+        "Resources/Textures/roughPlastic.bmp",
         shader_id, camera));
 }
 
