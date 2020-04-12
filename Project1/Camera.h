@@ -37,8 +37,10 @@ public:
 		this->Update();
 	}
 
-	void Rotate(float degrees, glm::vec3 r) {
-		this->cameraDir = glm::rotate(cameraDir, glm::radians(degrees), -r);
+	void Rotate(float degrees, glm::vec3 axis) {
+
+		// TODO: FIX GIMBAL LOCK EFFECT 
+		this->cameraDir = glm::rotate(cameraDir, glm::radians(degrees), -axis);
 		this->Update();
 	}
 
