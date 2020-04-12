@@ -1,4 +1,5 @@
 #include <iostream>
+#include <list>
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -31,8 +32,8 @@ unsigned const int DELTA_TIME = 10;
 GLuint shader_id;
 
 Camera * camera;
-Object * teapot, * torus, * cube;
 
+list<Object> objects;
 
 //--------------------------------------------------------------------------------
 // Keyboard handling
@@ -61,9 +62,6 @@ void specialKeyHandler(int key, int x, int y)
         int screen_h = glutGet(GLUT_SCREEN_HEIGHT);
         int screen_w = glutGet(GLUT_SCREEN_WIDTH);
 
-        // Toggle fullscreen
-        glutFullScreenToggle();
-
         // Set new window width and height
         if (glutGet(GLUT_SCREEN_HEIGHT) == glutGet(GLUT_WINDOW_HEIGHT))
         {
@@ -74,21 +72,9 @@ void specialKeyHandler(int key, int x, int y)
             // Go fullscreen
             glutReshapeWindow(glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
         }
-    }
-}
 
-void mouseHandler(int button, int state, int x, int y)
-{
-    /*
-        Buttons:
-            0: LMB
-            1: MMB
-            2: RMB
-        State:
-            0: Clicked
-            1: Unclicked
-    */
-    cout << "Button: " << button << " - State: " << state << " - X: " << x << " - Y: " << y << endl;
+        glutFullScreenToggle();
+    }
 }
 
 void motionHandler(int x, int y)
@@ -113,11 +99,10 @@ void Render()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    teapot->Rotate(1, glm::vec3(0.0f, 1.0f, 0.0f));
-
-    teapot->Render();
-    torus->Render();
-    cube->Render();
+    for (Object obj : objects)
+    {
+        obj.Render();
+    }
 
     glutSwapBuffers();
 }
@@ -144,8 +129,8 @@ void InitGlutGlew(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("Hello OpenGL");
+    glutInitWindowSize(1280, 720);
+    glutCreateWindow("AAAAAAAAAAAAAAAAH");
     glutDisplayFunc(Render);
 
     glutKeyboardFunc(keyboardHandler);
@@ -183,24 +168,160 @@ void InitShaders()
 void InitObjects()
 {
     camera = new Camera(
-        45.0f, 
-        glm::vec3(0.0, 1.7, 7.0),
+        75.0f, 
+        glm::vec3(0.0, 1.7, 1.5),
         glm::vec3(0.0, 1.0, 0.0));
 
-    teapot = new Object(
-        "Resources/Objects/teapot.obj", 
-        "Resources/Textures/uvtemplate.bmp",
-        shader_id, camera);
-    torus = new Object(
-        "Resources/Objects/torus.obj",
-        "Resources/Textures/uvtemplate.bmp",
-        shader_id, camera);
-    torus->Translate(3, 0, 0);
-    cube = new Object(
-        "Resources/Objects/box.obj",
-        "Resources/Textures/test.bmp",
-        shader_id, camera);
-    cube->Translate(-3, 0, 0);
+    // ------------------------------------------------------
+    // WALLS, FLOOR & CEILING
+    // ------------------------------------------------------
+    objects.push_back(Object(
+        "Resources/Objects/room_walls.obj",
+        "Resources/Textures/wall.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/room_ceiling.obj",
+        "Resources/Textures/wall.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/chimney.obj",
+        "Resources/Textures/wall.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/room_floor.obj",
+        "Resources/Textures/carpet.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/windows.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/door.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+
+    // ------------------------------------------------------
+    // BED
+    // ------------------------------------------------------
+    objects.push_back(Object(
+        "Resources/Objects/bedframe.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera,
+        glm::vec3(-0.859137, 0, -0.894849)));
+    objects.push_back(Object(
+        "Resources/Objects/bedframe_drawer.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera,
+        glm::vec3(-0.859137, 0, -0.894849)));
+    objects.push_back(Object(
+        "Resources/Objects/mattress.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera,
+        glm::vec3(-0.859137, 0, -0.894849)));
+
+    // ------------------------------------------------------
+    // Fridge
+    // ------------------------------------------------------
+    objects.push_back(Object(
+        "Resources/Objects/fridge.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/fridge_door.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+
+    // ------------------------------------------------------
+    // Kitchen cabinets
+    // ------------------------------------------------------
+    objects.push_back(Object(
+        "Resources/Objects/KitchenCabinets.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/KitchenCabinets_Door_L.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/KitchenCabinets_Door_R.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+
+    // ------------------------------------------------------
+    // Kitchen sink
+    // ------------------------------------------------------
+    objects.push_back(Object(
+        "Resources/Objects/KitchenSink_Top.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/KitchenSink_Bottom.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/KitchenSink_Door_L.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/KitchenSink_Door_R.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+
+    // ------------------------------------------------------
+    // TV Cabinet
+    // ------------------------------------------------------
+    objects.push_back(Object(
+        "Resources/Objects/Cabinet.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/Cabinet_Drawer.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+
+
+    // ------------------------------------------------------
+    // MISC. SINGLE ITEMS
+    // ------------------------------------------------------
+    objects.push_back(Object(
+        "Resources/Objects/desk.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera,
+        glm::vec3(-0.624001, 0, 1.5851)));
+    objects.push_back(Object(
+        "Resources/Objects/couch.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera,
+        glm::vec3(1.37328, 0, -1.18505)));
+    objects.push_back(Object(
+        "Resources/Objects/radiator.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera,
+        glm::vec3(1.81458, 0, 0.765988)));
+    objects.push_back(Object(
+        "Resources/Objects/shelves_1.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/shelves_2.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/TV.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/table.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/bin.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
+    objects.push_back(Object(
+        "Resources/Objects/clock.obj",
+        "Resources/Textures/paintedwood.bmp",
+        shader_id, camera));
 }
 
 

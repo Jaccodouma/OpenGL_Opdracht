@@ -44,6 +44,23 @@ public:
 		this->Update();
 	}
 
+	void Update() {
+		glm::vec3 lookAtPos = this->cameraPos + this->cameraDir;
+
+		this->view = glm::lookAt(
+			cameraPos,
+			lookAtPos,
+			glm::vec3(0.0, 1.0, 0.0)
+		);
+
+		this->projection = glm::perspective(
+			glm::radians(fov), /* FOV */
+			1.0f * glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT), /* ASPECT RATIO */
+			0.1f, /* NEAR CLIPPING PANE */
+			20.0f /* FAR CLIPPING PANE */
+		);
+	}
+
 	glm::mat4 getView() { return this->view; };
 	glm::mat4 getProjection() { return this->projection; };
 private:
@@ -56,22 +73,5 @@ private:
 	float fov;
 	int WIDTH; 
 	int HEIGHT;
-
-	void Update() {
-		glm::vec3 lookAtPos = this->cameraPos + this->cameraDir;
-
-		view = glm::lookAt(
-			cameraPos,
-			lookAtPos,
-			glm::vec3(0.0, 1.0, 0.0)
-		);
-
-		projection = glm::perspective(
-			glm::radians(fov), /* FOV */
-			1.0f * glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT), /* ASPECT RATIO */
-			0.1f, /* NEAR CLIPPING PANE */
-			20.0f /* FAR CLIPPING PANE */
-		);
-	}
 };
 
