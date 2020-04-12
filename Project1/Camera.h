@@ -1,7 +1,10 @@
 #pragma once
+#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp> 
+
+using namespace std;
 
 class Camera
 {
@@ -11,22 +14,19 @@ public:
 		this->WIDTH = WIDTH;
 		this->HEIGHT = HEIGHT;
 		this->cameraPos = cameraPos;
-		this->lookAtPos = lookAtPos;
+		this->cameraDir = lookAtPos - cameraPos;
+		this->cameraDir = normalize(this->cameraDir);
 
 		this->Update();
 	}
 
 	void Translate(glm::vec3 t) {
 		this->cameraPos += t; 
-		this->lookAtPos += t; 
 		this->Update();
 	}
 
 	void Rotate(float degrees, glm::vec3 r) {
-		glm::vec3 newCameraPos = this->cameraPos;
-		newCameraPos = glm::rotate(newCameraPos, glm::radians(degrees), r);
-		this->cameraPos = newCameraPos; 
-
+		this->cameraDir = glm::rotate(cameraDir, glm::radians(degrees), -r);
 		this->Update();
 	}
 
@@ -34,7 +34,7 @@ public:
 	glm::mat4 getProjection() { return this->projection; };
 private:
 	glm::vec3 cameraPos;
-	glm::vec3 lookAtPos;
+	glm::vec3 cameraDir;
 
 	glm::mat4 view; 
 	glm::mat4 projection;
@@ -44,6 +44,8 @@ private:
 	int HEIGHT;
 
 	void Update() {
+		glm::vec3 lookAtPos = this->cameraPos + this->cameraDir;
+
 		view = glm::lookAt(
 			cameraPos,
 			lookAtPos,

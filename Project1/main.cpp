@@ -142,7 +142,7 @@ void InitObjects()
         45.0f, 
         WIDTH, 
         HEIGHT, 
-        glm::vec3(0.0, 1.7, 1.5),
+        glm::vec3(0.0, 1.7, 7.0),
         glm::vec3(0.0, 1.0, 0.0));
 
     teapot = new Object(
