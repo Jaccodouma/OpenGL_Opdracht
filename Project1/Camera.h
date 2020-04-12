@@ -32,8 +32,6 @@ public:
 
 		this->cameraPos += translation;
 
-		cout << cameraPos.x << " - " << cameraPos.y << " - " << cameraPos.z << endl;
-
 		this->Update();
 	}
 
