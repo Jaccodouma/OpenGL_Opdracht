@@ -21,7 +21,19 @@ public:
 	}
 
 	void Translate(glm::vec3 t) {
-		this->cameraPos += t; 
+		glm::vec3 translation = glm::vec3(0,0,0); 
+		translation += this->cameraDir * -t.z;
+
+		// Move this up to not move Y coord when moving forward and back 
+		glm::vec3 t_side = glm::rotate(this->cameraDir, glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
+		t_side.y = 0; 
+		t_side = normalize(t_side);
+		translation +=  t_side * -t.x;
+
+		this->cameraPos += translation;
+
+		cout << cameraPos.x << " - " << cameraPos.y << " - " << cameraPos.z << endl;
+
 		this->Update();
 	}
 
