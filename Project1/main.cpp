@@ -19,9 +19,6 @@ using namespace std;
 //--------------------------------------------------------------------------------
 // Consts
 //--------------------------------------------------------------------------------
-
-const int WIDTH = 800, HEIGHT = 600;
-
 const char* fragshader_name = "fragmentshader.fsh";
 const char* vertexshader_name = "vertexshader.vsh";
 
@@ -54,15 +51,56 @@ void keyboardHandler(unsigned char key, int a, int b)
         camera->Translate(glm::vec3(0.0f, 0.0f, 0.1f));
     if (key == 'd')
         camera->Translate(glm::vec3(0.1f, 0.0f, 0.0f));
+}
 
-    if (key == 'i')
-        camera->Rotate(-1, glm::vec3(1.0f, 0.0f, 0.0f));
-    if (key == 'j')
-        camera->Rotate(-1, glm::vec3(0.0f, 1.0f, 0.0f));
-    if (key == 'k')
-        camera->Rotate(1, glm::vec3(1.0f, 0.0f, 0.0f));
-    if (key == 'l')
-        camera->Rotate(1, glm::vec3(0.0f, 1.0f, 0.0f));
+void specialKeyHandler(int key, int x, int y)
+{
+    if (key == GLUT_KEY_F11)
+    {
+        // Screen size
+        int screen_h = glutGet(GLUT_SCREEN_HEIGHT);
+        int screen_w = glutGet(GLUT_SCREEN_WIDTH);
+
+        // Toggle fullscreen
+        glutFullScreenToggle();
+
+        // Set new window width and height
+        if (glutGet(GLUT_SCREEN_HEIGHT) == glutGet(GLUT_WINDOW_HEIGHT))
+        {
+            // Get out of fullscreen
+            glutReshapeWindow(800, 600);
+        }
+        else {
+            // Go fullscreen
+            glutReshapeWindow(glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
+        }
+    }
+}
+
+void mouseHandler(int button, int state, int x, int y)
+{
+    /*
+        Buttons:
+            0: LMB
+            1: MMB
+            2: RMB
+        State:
+            0: Clicked
+            1: Unclicked
+    */
+    cout << "Button: " << button << " - State: " << state << " - X: " << x << " - Y: " << y << endl;
+}
+
+void motionHandler(int x, int y)
+{
+    static int center_x = glutGet(GLUT_WINDOW_WIDTH) / 2;
+    static int center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+
+    if (center_x != x || center_y != y) {
+        camera->Rotate(1, glm::vec3(y-center_y, x-center_x, 0.0f));
+    }
+
+    glutWarpPointer(center_x, center_y);
 }
 
 
@@ -106,11 +144,17 @@ void InitGlutGlew(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(WIDTH, HEIGHT);
+    glutInitWindowSize(800, 600);
     glutCreateWindow("Hello OpenGL");
     glutDisplayFunc(Render);
+
     glutKeyboardFunc(keyboardHandler);
+    glutSpecialFunc(specialKeyHandler);
+    glutPassiveMotionFunc(motionHandler);
+
     glutTimerFunc(DELTA_TIME, Render, 0);
+
+    glutSetCursor(GLUT_CURSOR_NONE);
 
     glewInit();
 }
@@ -140,8 +184,6 @@ void InitObjects()
 {
     camera = new Camera(
         45.0f, 
-        WIDTH, 
-        HEIGHT, 
         glm::vec3(0.0, 1.7, 7.0),
         glm::vec3(0.0, 1.0, 0.0));
 

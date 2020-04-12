@@ -1,5 +1,9 @@
 #pragma once
 #include <iostream>
+
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp> 
@@ -9,10 +13,8 @@ using namespace std;
 class Camera
 {
 public:
-	Camera(float fov, int WIDTH, int HEIGHT, glm::vec3 cameraPos, glm::vec3 lookAtPos) {
+	Camera(float fov, glm::vec3 cameraPos, glm::vec3 lookAtPos) {
 		this->fov = fov;
-		this->WIDTH = WIDTH;
-		this->HEIGHT = HEIGHT;
 		this->cameraPos = cameraPos;
 		this->cameraDir = lookAtPos - cameraPos;
 		this->cameraDir = normalize(this->cameraDir);
@@ -64,7 +66,7 @@ private:
 
 		projection = glm::perspective(
 			glm::radians(fov), /* FOV */
-			1.0f * WIDTH / HEIGHT, /* ASPECT RATIO */
+			1.0f * glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT), /* ASPECT RATIO */
 			0.1f, /* NEAR CLIPPING PANE */
 			20.0f /* FAR CLIPPING PANE */
 		);
