@@ -47,11 +47,11 @@ void keyboardHandler(unsigned char key, int a, int b)
         glutExit();
 
     if (key == 'w')
-        camera->Translate(glm::vec3(0.0f, 0.1f, 0.0f));
+        camera->Translate(glm::vec3(0.0f, 0.0f, -0.1f));
     if (key == 'a')
         camera->Translate(glm::vec3(-0.1f, 0.0f, 0.0f));
     if (key == 's')
-        camera->Translate(glm::vec3(0.0f, -0.1f, 0.0f));
+        camera->Translate(glm::vec3(0.0f, 0.0f, 0.1f));
     if (key == 'd')
         camera->Translate(glm::vec3(0.1f, 0.0f, 0.0f));
 
@@ -142,8 +142,8 @@ void InitObjects()
         45.0f, 
         WIDTH, 
         HEIGHT, 
-        glm::vec3(0.0, 2.0, 7.0),
-        glm::vec3(0.0, 0.0, 0.0));
+        glm::vec3(0.0, 1.7, 1.5),
+        glm::vec3(0.0, 1.0, 0.0));
 
     teapot = new Object(
         "Resources/Objects/teapot.obj", 
