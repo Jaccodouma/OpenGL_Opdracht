@@ -66,7 +66,7 @@ void specialKeyHandler(int key, int x, int y)
         if (glutGet(GLUT_SCREEN_HEIGHT) == glutGet(GLUT_WINDOW_HEIGHT))
         {
             // Get out of fullscreen
-            glutReshapeWindow(800, 600);
+            glutReshapeWindow(1280, 720);
         }
         else {
             // Go fullscreen
@@ -82,8 +82,13 @@ void motionHandler(int x, int y)
     static int center_x = glutGet(GLUT_WINDOW_WIDTH) / 2;
     static int center_y = glutGet(GLUT_WINDOW_HEIGHT) / 2;
 
-    if (center_x != x || center_y != y) {
-        camera->Rotate(1, glm::vec3(y-center_y, x-center_x, 0.0f));
+    float dx = (float) x- center_x;
+    float dy = center_y - (float) y;
+
+    cout << dx << " - " << dy << endl;
+
+    if (dx != 0.0f && dy != 0.0f) {
+        camera->Rotate(dx, dy);
     }
 
     glutWarpPointer(center_x, center_y);
@@ -129,7 +134,7 @@ void InitGlutGlew(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(1280, 720);
+    glutInitWindowSize(1280/2, 720/2);
     glutCreateWindow("AAAAAAAAAAAAAAAAH");
     glutDisplayFunc(Render);
 

@@ -19,6 +19,9 @@ public:
 		this->cameraDir = lookAtPos - cameraPos;
 		this->cameraDir = normalize(this->cameraDir);
 
+		pitch = 0; 
+		yaw = 0;
+
 		this->Update();
 	}
 
@@ -44,6 +47,31 @@ public:
 		this->Update();
 	}
 
+	void Rotate(float x, float y) {
+		float sensitivity = 0.05;
+
+		x *= sensitivity;
+		y *= sensitivity;
+		
+		yaw += x;
+		pitch += y; 
+
+		if (pitch > 89.0f)
+			pitch = 89.0f;
+		if (pitch < -89.0f)
+			pitch = -89.0f;
+
+		yaw = fmod(yaw, 360.0f);
+
+		glm::vec3 front;
+		front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		front.y = sin(glm::radians(pitch));
+		front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		cameraDir= glm::normalize(front);
+
+		this->Update();
+	}
+
 	void Update() {
 		glm::vec3 lookAtPos = this->cameraPos + this->cameraDir;
 
@@ -64,6 +92,8 @@ public:
 	glm::mat4 getView() { return this->view; };
 	glm::mat4 getProjection() { return this->projection; };
 private:
+	float yaw, pitch;
+
 	glm::vec3 cameraPos;
 	glm::vec3 cameraDir;
 
